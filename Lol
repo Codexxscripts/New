@@ -47,14 +47,21 @@ local Tabs = {
     Teleport = Window:AddTab({ Title = "ig", Icon = "car" }),
     Visual = Window:AddTab({ Title = "Visual", Icon = "eye" })
 }
-MainTab:CreateButton {
-    Title = "FullBright",
-    Callback = function()
-        local Lighting = game:GetService("Lighting")
-        Lighting.Brightness = 2
-        Lighting.ClockTime = 14
-        Lighting.FogEnd = 100000
-        Lighting.GlobalShadows = false
-        Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+Tabs.Main:AddToggle({
+        Title = "Iron Pickaxe",
+        Description = "You should have it in your hands",
+        Callback = function(Value)
+_G.FullBright = Value
+while _G.FullBright do
+game.Lighting.Brightness = 2
+game.Lighting.ClockTime = 14
+game.Lighting.FogEnd = 100000
+game.Lighting.GlobalShadows = false
+game.Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+task.wait()
+end
+for i, v in pairs(_G.GetOldBright) do
+game.Lighting[i] = v
+end
     end
-}
+end})
