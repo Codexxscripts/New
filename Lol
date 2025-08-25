@@ -47,7 +47,7 @@ local Tabs = {
     Teleport = Window:AddTab({ Title = "ig", Icon = "car" }),
     Visual = Window:AddTab({ Title = "Visual", Icon = "eye" })
 }
-Tabs.Visoal:AddButton({
+Tabs.Visual:AddButton({
         Title = "Fullbright",
         Description = "lol",
         Callback = function()
