@@ -47,3 +47,20 @@ local Tabs = {
     Teleport = Window:AddTab({ Title = "ig", Icon = "car" }),
     Visual = Window:AddTab({ Title = "Visual", Icon = "eye" })
 }
+local Toggle = Tabs.Visial:AddToggle("Fullbright", {Title = "Fullbright", Default = false })
+
+    Toggle:OnChanged(function()
+_G.FullBright = Value
+while _G.FullBright do
+game.Lighting.Brightness = 2
+game.Lighting.ClockTime = 14
+game.Lighting.FogEnd = 100000
+game.Lighting.GlobalShadows = false
+game.Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+task.wait()
+end
+for i, v in pairs(_G.GetOldBright) do
+game.Lighting[i] = v
+end
+    end)
+end)
