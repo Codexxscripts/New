@@ -2,15 +2,6 @@ local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOog
 local SaveManager = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/master/Addons/SaveManager.luau"))()
 local InterfaceManager = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/ActualMasterOogway/Fluent-Renewed/master/Addons/InterfaceManager.luau"))()
  
-local Window = Library:CreateWindow{
-    Title = "99 Night in the Forest",
-    SubTitle = "by @Codexxscripts (Only Telegram)",
-    TabWidth = 160,
-    Size = UDim2.fromOffset(550, 380),
-    Acrylic = true, 
-    Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl
-}
 -- combat
 
 local killAuraToggle = false
@@ -499,6 +490,16 @@ local function MobileFly()
     end)
 end
 
+local Window = Library:CreateWindow{
+    Title = "99 Night in the Forest",
+    SubTitle = "by @Codexxscripts (Only Telegram)",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(550, 380),
+    Acrylic = true, 
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl
+}
+
 local Tabs = {
     Main = Window:CreateTab{
         Title = "Main",
@@ -535,40 +536,6 @@ Tp = Window:CreateTab{
     },
 
 
-Tabs.Combat:Toggle({
-    Title = "Kill Aura",
-    Value = false,
-    Callback = function(state)
-        killAuraToggle = state
-        if state then
-            task.spawn(killAuraLoop)
-        else
-            local tool, _ = getAnyToolWithDamageID(false)
-            unequipTool(tool)
-        end
-    end
-})
+local CombatToggle = Tabs.Combat:CreateToggle("Aura", {Title = "", Default = false })
 
-Tabs.Combat:Toggle({
-    Title = "Chop Aura",
-    Value = false,
-    Callback = function(state)
-        chopAuraToggle = state
-        if state then
-            task.spawn(chopAuraLoop)
-        else
-            local tool, _ = getAnyToolWithDamageID(true)
-            unequipTool(tool)
-        end
-    end
-})
-
-Tabs.Combat:Section({ Title = "Settings", Icon = "settings" })
-
-Tabs.Combat:Slider({
-    Title = "Aura Radius",
-    Value = { Min = 50, Max = 500, Default = 50 },
-    Callback = function(value)
-        auraRadius = math.clamp(value, 10, 500)
-    end
-})
+CombatToggle:OnChanged(function(value)
