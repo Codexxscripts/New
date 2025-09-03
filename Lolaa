@@ -535,7 +535,9 @@ Tp = Window:CreateTab{
         Icon = "file"
     },
 
+local Options = Fluent.Options
 
+do
 local CombatToggle = Tabs.Combat:CreateToggle("Aura", {Title = "", Default = false })
 
 CombatToggle:OnChanged(function(value)
