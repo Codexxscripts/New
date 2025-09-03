@@ -531,5 +531,5 @@ players = Window:CreateTab{
 
 Tp = Window:CreateTab{
         Title = "Teleport",
-        Icon = ""
+        Icon = "file"
     },
