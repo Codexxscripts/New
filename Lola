@@ -191,3 +191,130 @@ local function chopAuraLoop()
         end
     end
 end
+
+function wiki(nome)
+    local c = 0
+    for _, i in ipairs(Workspace.Items:GetChildren()) do
+        if i.Name == nome then
+            c = c + 1
+        end
+    end
+    return c
+end
+
+function ghn()
+    return math.floor(LocalPlayer.PlayerGui.Interface.StatBars.HungerBar.Bar.Size.X.Scale * 100)
+end
+
+function feed(nome)
+    for _, item in ipairs(Workspace.Items:GetChildren()) do
+        if item.Name == nome then
+            ReplicatedStorage.RemoteEvents.RequestConsumeItem:InvokeServer(item)
+            break
+        end
+    end
+end
+
+function notifeed(nome)
+    WindUI:Notify({
+        Title = "Auto Food Paused",
+        Content = "The food is gone",
+        Duration = 3
+    })
+end
+
+local function moveItemToPos(item, position)
+    if not item or not item:IsDescendantOf(workspace) or not item:IsA("BasePart") and not item:IsA("Model") then return end
+    local part = item:IsA("Model") and (item.PrimaryPart or item:FindFirstChildWhichIsA("BasePart") or item:FindFirstChild("Handle")) or item
+    if not part or not part:IsA("BasePart") then return end
+
+    if item:IsA("Model") and not item.PrimaryPart then
+        pcall(function() item.PrimaryPart = part end)
+    end
+
+    pcall(function()
+        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents").RequestStartDraggingItem:FireServer(item)
+        if item:IsA("Model") then
+            item:SetPrimaryPartCFrame(CFrame.new(position))
+        else
+            part.CFrame = CFrame.new(position)
+        end
+        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents").StopDraggingItem:FireServer(item)
+    end)
+end
+
+local function getChests()
+    local chests = {}
+    local chestNames = {}
+    local index = 1
+    for _, item in ipairs(workspace:WaitForChild("Items"):GetChildren()) do
+        if item.Name:match("^Item Chest") and not item:GetAttribute("8721081708Opened") then
+            table.insert(chests, item)
+            table.insert(chestNames, "Chest " .. index)
+            index = index + 1
+        end
+    end
+    return chests, chestNames
+end
+
+local currentChests, currentChestNames = getChests()
+local selectedChest = currentChestNames[1] or nil
+
+local function getMobs()
+    local mobs = {}
+    local mobNames = {}
+    local index = 1
+    for _, character in ipairs(workspace:WaitForChild("Characters"):GetChildren()) do
+        if character.Name:match("^Lost Child") and character:GetAttribute("Lost") == true then
+            table.insert(mobs, character)
+            table.insert(mobNames, character.Name)
+            index = index + 1
+        end
+    end
+    return mobs, mobNames
+end
+
+local currentMobs, currentMobNames = getMobs()
+local selectedMob = currentMobNames[1] or nil
+
+function tp1()
+	(game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()):WaitForChild("HumanoidRootPart").CFrame =
+CFrame.new(0.43132782, 15.77634621, -1.88620758, -0.270917892, 0.102997094, 0.957076371, 0.639657021, 0.762253821, 0.0990355015, -0.719334781, 0.639031112, -0.272391081)
+end
+
+local function tp2()
+    local targetPart = workspace:FindFirstChild("Map")
+        and workspace.Map:FindFirstChild("Landmarks")
+        and workspace.Map.Landmarks:FindFirstChild("Stronghold")
+        and workspace.Map.Landmarks.Stronghold:FindFirstChild("Functional")
+        and workspace.Map.Landmarks.Stronghold.Functional:FindFirstChild("EntryDoors")
+        and workspace.Map.Landmarks.Stronghold.Functional.EntryDoors:FindFirstChild("DoorRight")
+        and workspace.Map.Landmarks.Stronghold.Functional.EntryDoors.DoorRight:FindFirstChild("Model")
+    if targetPart then
+        local children = targetPart:GetChildren()
+        local destination = children[5]
+        if destination and destination:IsA("BasePart") then
+            local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                hrp.CFrame = destination.CFrame + Vector3.new(0, 5, 0)
+            end
+        end
+    end
+end
+
+local flyToggle = false
+local flySpeed = 1
+local FLYING = false
+local flyKeyDown, flyKeyUp, mfly1, mfly2
+local IYMouse = game:GetService("UserInputService")
+
+-- Fly pc
+local function sFLY()
+    repeat task.wait() until Players.LocalPlayer and Players.LocalPlayer.Character and Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart") and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    repeat task.wait() until IYMouse
+    if flyKeyDown or flyKeyUp then flyKeyDown:Disconnect(); flyKeyUp:Disconnect() end
+
+    local T = Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+    local CONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+    local lCONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+    local SPEED = flySpeed
