@@ -541,3 +541,11 @@ do
 local CombatToggle = Tabs.Combat:CreateToggle("Aura", {Title = "", Default = false })
 
 CombatToggle:OnChanged(function(value)
+killAuraToggle = state
+        if state then
+            task.spawn(killAuraLoop)
+        else
+            local tool, _ = getAnyToolWithDamageID(false)
+            unequipTool(tool)
+        end
+    end
