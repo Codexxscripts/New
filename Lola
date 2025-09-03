@@ -505,7 +505,31 @@ local Tabs = {
         Icon = "phosphor-users-bold"
     },
 
-Esp = Window:CreateTab{
+Combat = Window:CreateTab{
+        Title = "Combat",
+        Icon = "sword"
+    },
+Auto = Window:CreateTab{
+        Title = "Auto",
+        Icon = "Robot"
+    },
+
+esp = Window:CreateTab{
         Title = "Esp",
+        Icon = "eye"
+    },
+
+br = Window:CreateTab{
+        Title = "bring",
         Icon = "map-pin"
+    },
+
+players = Window:CreateTab{
+        Title = "Player",
+        Icon = "user"
+    },
+
+Tp = Window:CreateTab{
+        Title = "Teleport",
+        Icon = ""
     },
