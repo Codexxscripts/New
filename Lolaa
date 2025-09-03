@@ -533,3 +533,8 @@ Tp = Window:CreateTab{
         Title = "Teleport",
         Icon = "file"
     },
+
+
+local CombatToggle = Tabs.Combat:CreateToggle("Aura", {Title = "", Default = false })
+
+CombatToggle:OnChanged(function(value)
