@@ -535,6 +535,40 @@ Tp = Window:CreateTab{
     },
 
 
-local CombatToggle = Tabs.Combat:CreateToggle("Aura", {Title = "", Default = false })
+Tabs.Combat:Toggle({
+    Title = "Kill Aura",
+    Value = false,
+    Callback = function(state)
+        killAuraToggle = state
+        if state then
+            task.spawn(killAuraLoop)
+        else
+            local tool, _ = getAnyToolWithDamageID(false)
+            unequipTool(tool)
+        end
+    end
+})
 
-CombatToggle:OnChanged(function(value)
+Tabs.Combat:Toggle({
+    Title = "Chop Aura",
+    Value = false,
+    Callback = function(state)
+        chopAuraToggle = state
+        if state then
+            task.spawn(chopAuraLoop)
+        else
+            local tool, _ = getAnyToolWithDamageID(true)
+            unequipTool(tool)
+        end
+    end
+})
+
+Tabs.Combat:Section({ Title = "Settings", Icon = "settings" })
+
+Tabs.Combat:Slider({
+    Title = "Aura Radius",
+    Value = { Min = 50, Max = 500, Default = 50 },
+    Callback = function(value)
+        auraRadius = math.clamp(value, 10, 500)
+    end
+})
